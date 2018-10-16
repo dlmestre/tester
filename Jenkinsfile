@@ -4,11 +4,8 @@ pipeline {
 		stage('Build docker images') {
 			steps {
 				echo 'Starting to build docker image'
-
-                script {
-                        def customImage = docker.build("tester:${env.BUILD_ID}")
-                        customImage.push()
-                    }
+				sh 'docker build -t tester:${env.BUILD_ID} .'
+				sh 'docker run -d tester:${env.BUILD_ID}'
 			}
 		}
 	}
