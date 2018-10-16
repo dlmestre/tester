@@ -1,9 +1,13 @@
 pipeline {
 	agent any
 	stages {
-		stage('testing...') {
+		stage('Build docker images') {
 			steps {
-				sh "python dev_tester.py"
+				echo 'Starting to build docker image'
+
+                script {
+                    def customImage = docker.build("tester:${env.BUILD_ID}")
+                    customImage.push()
 			}
 		}
 	}
