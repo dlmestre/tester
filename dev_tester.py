@@ -1,19 +1,25 @@
+import boto3
+from moto import mock_s3
+import botocore
 import unittest
 
-class TestStringMethods(unittest.TestCase):
+def upload_testing_file():
+	return 3
 
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
+class TestImageDownloader(unittest.TestCase):
+    
+    @mock_s3
+    def setUp(self):
+        client = boto3.client('s3')
+    	conn = boto3.resource('s3', region_name='us-east-1')
+    	# We need to create the bucket since this is all in Moto's 'virtual' AWS account
+    	conn.create_bucket(Bucket='somenewbuckettotests3')
 
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
-
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        with self.assertRaises(TypeError):
-            s.split(2)
+    @mock_s3
+    def test_bucket_name(self):
+    	client = boto3.client('s3')
+    	buckets = [bucket['Name'] for bucket in response['Buckets']]
+        self.assertEqual(buckets[0], 'somenewbuckettotests3')
 
 if __name__ == '__main__':
     unittest.main()
